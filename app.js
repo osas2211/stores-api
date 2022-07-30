@@ -6,6 +6,7 @@ require("dotenv").config()
 
 const PORT = process.env.PORT || 5500
 
+app.use(express.json())
 app.use("/api/products", router)
 
 const start = async () => {

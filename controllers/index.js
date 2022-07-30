@@ -44,6 +44,35 @@ const getProducts = async (req, res, next) => {
   }
 }
 
+const addProduct = async (req, res, next) => {
+  try {
+    const product = await productModel.create(req.body)
+    return res.status(200).json({ success: true, product })
+  } catch (error) {
+    res.status(500).json({ success: false, msg: error.message })
+  }
+}
+
+const updateProduct = async (req, res, next) => {
+  try {
+    const product = await productModel.findOneAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      { ...req.body },
+      {
+        new: true,
+        runValidators: true,
+      }
+    )
+    res.status(200).json({ success: true, msg: product })
+  } catch (error) {
+    res.status(500).json({ success: false, msg: error.message })
+  }
+}
+
 module.exports = {
   getProducts,
+  addProduct,
+  updateProduct,
 }
