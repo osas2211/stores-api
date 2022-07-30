@@ -4,6 +4,7 @@ const parseString = (str) => {
   return str.split(",").join(" ")
 }
 
+//GET products
 const getProducts = async (req, res, next) => {
   const { title, category, sort, fields, limit, page } = req.query
   const queryObj = {}
@@ -27,6 +28,11 @@ const getProducts = async (req, res, next) => {
   }
 
   //Pagination
+  if (page) {
+    let limit = Number(req.query.limit) || 6
+    let skip = (Number(page) - 1) * limit
+    result = result.skip(skip).limit(limit)
+  }
 
   try {
     const products = await result.find(queryObj)
