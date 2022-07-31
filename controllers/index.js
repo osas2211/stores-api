@@ -65,7 +65,22 @@ const updateProduct = async (req, res, next) => {
         runValidators: true,
       }
     )
-    res.status(200).json({ success: true, msg: product })
+    if (product) {
+      return res.status(200).json({ success: true, msg: product })
+    }
+    res.status(404).json({ success: false, msg: "product not found" })
+  } catch (error) {
+    res.status(500).json({ success: false, msg: error.message })
+  }
+}
+
+const deleteProduct = async (req, res, next) => {
+  try {
+    const product = await productModel.findOneAndDelete({ _id: req.params.id })
+    if (product) {
+      return res.status(200).json({ success: true, msg: product })
+    }
+    res.status(404).json({ success: false, msg: "product not found" })
   } catch (error) {
     res.status(500).json({ success: false, msg: error.message })
   }
@@ -75,4 +90,5 @@ module.exports = {
   getProducts,
   addProduct,
   updateProduct,
+  deleteProduct,
 }
